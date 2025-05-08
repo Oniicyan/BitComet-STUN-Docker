@@ -140,7 +140,7 @@ UPDATE_HTTPS() {
 	nft add chain ip STUN NAT_OUTPUT { type nat hook output priority dstnat \; }
 	for HANDLE in $(nft -as list chain ip STUN NAT_OUTPUT | grep \"${NFTNAME}_mitm\" | awk '{print$NF}'); do nft delete rule ip STUN NAT_OUTPUT handle $HANDLE; done
 	nft insert rule ip STUN NAT_OUTPUT $OIFNAME $APPRULE skuid != 58443 ip daddr . tcp dport @BTTR_HTTPS counter redirect to $StunMitmEnPort comment ${NFTNAME}_mitm
-	nft insert rule ip STUN BTTR ip daddr 127.0.0.1 $OFFSET_HTTP_GET 0x474554202f616e6e6f756e63653f goto BTTR_HTTP
+	nft insert rule ip STUN BTTR ip daddr 127.0.0.1 meta l4proto tcp $OFFSET_HTTP_GET 0x474554202f616e6e6f756e63653f goto BTTR_HTTP
 }
 
 >StunNftables_$L4PROTO
