@@ -350,7 +350,7 @@ START_NAT() {
 	rm -f /tmp/StunServers_*
 	[ "$STUN_FLAG_TCP" = 0 ] && [ "$STUN_FLAG_UDP" = 0 ] && {
 		if [ "$STUN" = 1 ]; then
-			LOG 当前网络为公网映射；显示指定 STUN = 1 时，跳过自动禁用
+			LOG 当前网络为公网映射；显式指定 STUN = 1 时，跳过自动禁用
 		else
 			LOG 当前网络为公网映射；自动禁用 STUN，请自行开放端口
 			export STUN=0
@@ -492,7 +492,7 @@ else
 		START_BITCOMET && sleep 2
 	done
 	LOG BitComet 已启动，使用以下地址访问 WebUI
-	for IP in $HOSTIP; do LOG http://$IP:$BITCOMET_WEBUI_PORT; done
+	for IP in $HOSTIP; do LOG http://$IP:$BITCOMET_WEBUI_PORT/webui/; done
 	[ $StunInterval ] || export StunInterval=25
 	[[ $StunMode =~ tcp|both ]] && {
 		LOG 已启用 TCP 通道，执行 HTTP 保活
