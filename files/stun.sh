@@ -33,12 +33,12 @@ GET_STUN() {
 		echo $RES | grep -q 4164647265737320616c726561647920696e20757365 && {
 			let STUN_PORT_FLAG++
 			[ $STUN_PORT_FLAG -ge 10 ] && {
-				LOG 连续 10 次 $L4PROTO 端口被占用，暂停穿透 3600 秒
+				LOG 连续 10 次 ${L4PROTO^^} 端口被占用，暂停穿透 3600 秒
 				sleep 3600
 				unset STUN_PORT_FLAG
 				break
 			}
-			LOG $L4PROTO 穿透通道本地端口被占用，跳过 $STUN_PORT_FLAG 次
+			LOG ${L4PROTO^^} 穿透通道本地端口被占用，跳过 $STUN_PORT_FLAG 次
 			[[ $StunMode =~ nft ]] && export STUN_BIND_PORT=$(shuf -i 1024-65535 -n 1)
 			break
 		}
@@ -46,11 +46,11 @@ GET_STUN() {
 		[ $HEX ] && {
 			[ ${HEX:12:4} = "${STUN_HEX:12:4}" ] && break
 			[ $(($(date +%s)-$STUN_TIME)) -lt $(($StunInterval/$STUN_TIME_FLAG*3)) ] && {
-				LOG $L4PROTO 穿透通道保持时间低于 $(($StunInterval/$STUN_TIME_FLAG*3)) 秒（三次心跳间隔）
+				LOG ${L4PROTO^^} 穿透通道保持时间低于 $(($StunInterval/$STUN_TIME_FLAG*3)) 秒（三次心跳间隔）
 				let STUN_TIME_FLAG++
 				LOG 缩短 STUN 心跳间隔，当前为 $(($StunInterval/$STUN_TIME_FLAG)) 秒
 				[ $STUN_TIME_FLAG -ge 10 ] && {
-					LOG 连续 10 次 $L4PROTO 穿透通道保持时间过短，暂停穿透 3600 秒
+					LOG 连续 10 次 ${L4PROTO^^} 穿透通道保持时间过短，暂停穿透 3600 秒
 					sleep 3600
 					STUN_TIME=0
 					STUN_TIME_FLAG=1
@@ -62,7 +62,7 @@ GET_STUN() {
 			STUN_PORT=$((0x${HEX:12:4}^0x2112))
 			STUN_TIME=$(date +%s)
 			[ $STUN_TIME_LAST ] || STUN_TIME_LAST=$STUN_TIME
-			[ $STUN_TIME_LAST != $STUN_TIME ] && echo 上次 $L4PROTO 穿透通道保持时间 $(($STUN_TIME-$STUN_TIME_LAST)) 秒 && STUN_TIME_LAST=$STUN_TIME
+			[ $STUN_TIME_LAST != $STUN_TIME ] && echo 上次 ${L4PROTO^^} 穿透通道保持时间 $(($STUN_TIME-$STUN_TIME_LAST)) 秒 && STUN_TIME_LAST=$STUN_TIME
 			pkill -f stun_upnp_keep.sh
 			stun_exec.sh $STUN_IP $STUN_PORT $STUN_BIND_PORT $L4PROTO &
 			break
