@@ -35,6 +35,7 @@ ADD_UPNP
 	LOG 未找到 IGD UPnP 设备，自动禁用 UPnP
 	LOG 如要恢复 UPnP，请重启容器
 	>StunUpnpMiss
+	exit
 }
 
 [[ ! $StunMode =~ nft ]] && [ $STUN_UPNP_FLAG = 2 ] && [[ $UPNP_RES == *'ConflictWithOtherMechanisms'* ]] && \
