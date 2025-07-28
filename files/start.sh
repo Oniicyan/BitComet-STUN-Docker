@@ -531,7 +531,7 @@ EXIT() {
 	pkill -f stun_keep.sh
 	pkill -f stun_exec.sh
 	pkill -f stun_upnp.sh
-	pkill -f stun_upnp_keep.sh
+	pkill -f stun_upnp_check.sh
 	pkill -f nftables.sh
 	sleep 1
 	pkill -f nftables_exit.sh
