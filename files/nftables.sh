@@ -107,9 +107,7 @@ UPDATE_HTTPS() {
 		DOMAIN=$(echo $SERVER | awk -F : '{print$1}')
 		PORT=$(echo $SERVER | awk -F : '{print$2}')
 		for IP in $(getent ahosts $DOMAIN | grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}' | sort | uniq); do
-			[[ $IP =~ 0\.0\.0\.0|8\.8\.8\.8|127\.0\.0\.1 ]] && continue
-			([ $IP ] && [ $PORT ]) || (LOG $DOMAIN 解析失败 && continue)
-			nft add element ip STUN BTTR_HTTPS { $IP . $PORT }
+			[ $IP ] && [ $PORT ] && [[ ! $IP =~ 0\.0\.0\.0|8\.8\.8\.8|127\.0\.0\.1 ]] && nft add element ip STUN BTTR_HTTPS { $IP . $PORT } || LOG $DOMAIN 解析失败
 		done
 	done
 	[ -f /BitComet/CustomHttpsTrackers.txt ] || cp /files/CustomHttpsTrackers.txt /BitComet/CustomHttpsTrackers.txt
@@ -120,9 +118,7 @@ UPDATE_HTTPS() {
 			PORT=$(echo $SERVER | awk -F : '{print$2}')
 			[ $PORT ] || PORT=443
 			for IP in $(getent ahosts $DOMAIN | grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}' | sort | uniq); do
-				[[ $IP =~ 0\.0\.0\.0|127\.0\.0\.1 ]] && continue
-				([ $IP ] && [ $PORT ]) || (LOG $DOMAIN 解析失败 && continue)
-				nft add element ip STUN BTTR_HTTPS { $IP . $PORT }
+				[ $IP ] && [ $PORT ] && [[ ! $IP =~ 0\.0\.0\.0|8\.8\.8\.8|127\.0\.0\.1 ]] && nft add element ip STUN BTTR_HTTPS { $IP . $PORT } || LOG $DOMAIN 解析失败
 			done
 		else
 			LIST="$LIST"$'\n'$LINE
