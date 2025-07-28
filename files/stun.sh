@@ -63,7 +63,7 @@ GET_STUN() {
 			STUN_TIME=$(date +%s)
 			[ $STUN_TIME_LAST ] || STUN_TIME_LAST=$STUN_TIME
 			[ $STUN_TIME_LAST != $STUN_TIME ] && echo 上次 ${L4PROTO^^} 穿透通道保持时间 $(($STUN_TIME-$STUN_TIME_LAST)) 秒 && STUN_TIME_LAST=$STUN_TIME
-			pkill -f stun_upnp_keep.sh
+			pkill -f stun_upnp_check.sh
 			stun_exec.sh $STUN_IP $STUN_PORT $STUN_BIND_PORT $L4PROTO &
 			break
 		}
