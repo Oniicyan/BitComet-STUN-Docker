@@ -107,7 +107,7 @@ UPDATE_HTTPS() {
 		DOMAIN=$(echo $SERVER | awk -F : '{print$1}')
 		PORT=$(echo $SERVER | awk -F : '{print$2}')
 		for IP in $(getent ahosts $DOMAIN | grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}' | sort | uniq); do
-			[[ $IP =~ 0\.0\.0\.0|127\.0\.0\.1 ]] && continue
+			[[ $IP =~ 0\.0\.0\.0|8\.8\.8\.8|127\.0\.0\.1 ]] && continue
 			nft add element ip STUN BTTR_HTTPS { $IP . $PORT }
 		done
 	done
