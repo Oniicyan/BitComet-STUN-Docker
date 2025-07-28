@@ -37,7 +37,7 @@ echo $WANPORT $LANPORT >StunPort_$L4PROTO
 
 # UPnP
 [ "$StunUpnp" = 0 ] || [ -f StunUpnpMiss ] || {
-	pkill -f stun_upnp_keep.sh
+	pkill -f stun_upnp_check.sh
 	[[ $StunMode =~ nft ]] && stun_upnp.sh $APPPORT $APPPORT $L4PROTO
 	[[ $StunMode =~ nft ]] || stun_upnp.sh $WANPORT $LANPORT $L4PROTO
 }
@@ -53,5 +53,5 @@ if [ $STUN_CHECK ] && [ $STUN_CHECK -ge 10 ]; then
 else
 	LOG $WANADDR:$WANPORT/$L4PROTO 连通性检测成功
 	[ $L4PROTO = tcp ] && pkill -10 -f stun.sh
-	[ "$StunUpnp" = 0 ] || [ ! -f StunUpnpHit ] || pgrep -f stun_check.sh >/dev/null || exec stun_upnp_check.sh $@ &
+	[ "$StunUpnp" = 0 ] || [ ! -f StunUpnpHit ] || pgrep -f stun_upnp_check.sh >/dev/null || exec stun_upnp_check.sh $@ &
 fi
