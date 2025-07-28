@@ -15,7 +15,7 @@ pkill -Af $0.*$L4PROTO
 # 检测 UPnP 规则有效性
 while :; do
 	[ $STUN_UPNP_CHECK ] || sleep $(($StunInterval*10))
-	[ $STUN_UPNP_CHECK ] && sleep $(($StunInterval/$STUN_UPNP_KEEP))
+	[ $STUN_UPNP_CHECK ] && sleep $(($StunInterval/$STUN_UPNP_CHECK))
 	if echo | socat - $L4PROTO:$WANADDR:$WANPORT,connect-timeout=2 2>/dev/null; then
 		unset STUN_UPNP_CHECK
 	else
