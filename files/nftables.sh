@@ -88,7 +88,7 @@ nft insert rule ip STUN BTTR_UDP $OIFNAME $APPRULE $OFFSET_UDP_ACTION 1 $OFFSET_
 UPDATE_HTTPS() {
 	LOG 获取 HTTPS Tracker 列表，最多等待 15 秒
 	echo -ne "GET /https_trackers.txt HTTP/1.1\r\nHost: oniicyan.pages.dev\r\nConnection: close\r\n\r\n" | \
-	timeout 15 openssl s_client -connect oniicyan.pages.dev:443 -quiet 2>/dev/null | grep -oE 'https://.*' >/tmp/HttpsTrackers.txt
+	timeout 15 openssl s_client -connect oniicyan.pages.dev:443 -quiet 2>/dev/null | awk '/^\r?$/{found=1; next} found' | grep -oE 'https://.*' >/tmp/HttpsTrackers.txt
 	if [ -s /tmp/HttpsTrackers.txt ]; then
 		LOG 获取 HTTPS Tracker 列表成功
 		if cmp -s /tmp/HttpsTrackers.txt HttpsTrackers.txt; then
