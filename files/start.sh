@@ -44,8 +44,7 @@ if mount | grep -q ' /Downloads '; then
 else
 	LOG /Downloads 目录未挂载，默认保存位置在容器层，重启后可能会丢失
 	BC_DL_FLAG=1
-	mkdir /Downloads
-	
+	mkdir -p /Downloads
 fi
 chmod 775 /Downloads
 BC_DL_REX='/Downloads|/BitComet|/PeerBanHelper|/tmp|/etc/resolv.conf|/etc/hostname|/etc/hosts'
@@ -266,7 +265,7 @@ LOG BitComet BT 端口当前为 $BITCOMET_BT_PORT
 # 更新 STUN 服务器列表
 [ "$STUN" = 0 ] || {
 	LOG 已启用 STUN，更新 STUN 服务器列表，最多等待 15 秒
-	echo -ne "GET /stun_servers_ipv4_rst.txt HTTP/1.1\r\nHost: oniicyan.pages.dev\r\nConnection: close\r\n\r\n" | \
+	echo -ne "GET /stun_servers_domain_norst.txt HTTP/1.1\r\nHost: oniicyan.pages.dev\r\nConnection: close\r\n\r\n" | \
 	timeout 15 openssl s_client -connect oniicyan.pages.dev:443 -quiet 2>/dev/null | grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}:[0-9]{1,5}' >/tmp/StunServers.txt
 	if [ -s /tmp/StunServers.txt ]; then
 		LOG 更新 STUN 服务器列表成功
