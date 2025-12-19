@@ -481,17 +481,17 @@ else
 	}
 	# START_BITCOMET | grep -v 'IPFilter loaded' &
 	START_BITCOMET | LOG_BITCOMET &
-	awk '{print$2,$4}' /proc/net/tcp /proc/net/tcp6 | grep 0A | grep -qiE '(0{8}|0{32}):'$(printf '%04x' $BITCOMET_BT_PORT)'' || {
-		LOG BitComet BT 端口未监听，3 秒后重试
-		sleep 3
-	}
-	until awk '{print$2,$4}' /proc/net/tcp /proc/net/tcp6 | grep 0A | grep -qiE '(0{8}|0{32}):'$(printf '%04x' $BITCOMET_BT_PORT)''; do
-		let START_TRY++
-		[ $START_TRY -ge 15 ] && LOG BitComet BT 端口监听失败，退出容器 && exit 1
-		LOG 第 $START_TRY 次重启 BitComet，最多 15 次
-		pkill -f bitcometd && sleep 1
-		START_BITCOMET && sleep 2
-	done
+#	awk '{print$2,$4}' /proc/net/tcp /proc/net/tcp6 | grep 0A | grep -qiE '(0{8}|0{32}):'$(printf '%04x' $BITCOMET_BT_PORT)'' || {
+#		LOG BitComet BT 端口未监听，3 秒后重试
+#		sleep 3
+#	}
+#	until awk '{print$2,$4}' /proc/net/tcp /proc/net/tcp6 | grep 0A | grep -qiE '(0{8}|0{32}):'$(printf '%04x' $BITCOMET_BT_PORT)''; do
+#		let START_TRY++
+#		[ $START_TRY -ge 15 ] && LOG BitComet BT 端口监听失败，退出容器 && exit 1
+#		LOG 第 $START_TRY 次重启 BitComet，最多 15 次
+#		pkill -f bitcometd && sleep 1
+#		START_BITCOMET && sleep 2
+#	done
 	LOG BitComet 已启动，使用以下地址访问 WebUI
 	for IP in $HOSTIP; do LOG http://$IP:$BITCOMET_WEBUI_PORT/webui/; done
 	[ $StunInterval ] || export StunInterval=25
