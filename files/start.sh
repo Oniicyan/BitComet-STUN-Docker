@@ -268,7 +268,7 @@ LOG BitComet BT 端口当前为 $BITCOMET_BT_PORT
 #	echo -ne "GET /stun_servers_ipv4_rst.txt HTTP/1.1\r\nHost: oniicyan.pages.dev\r\nConnection: close\r\n\r\n" | \
 #	timeout 15 openssl s_client -connect oniicyan.pages.dev:443 -quiet 2>/dev/null | grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}:[0-9]{1,5}' >/tmp/StunServers.txt
 	echo -ne "GET /stun_servers_domain_norst.txt HTTP/1.1\r\nHost: oniicyan.pages.dev\r\nConnection: close\r\n\r\n" | \
-	timeout 15 openssl s_client -connect oniicyan.pages.dev:443 -quiet 2>/dev/null | grep -oE '(.+\.)+[a-z]+:[0-9]{1,5}' >/tmp/StunServers.txt
+	timeout 15 openssl s_client -connect oniicyan.pages.dev:443 -quiet 2>/dev/null | grep -oE '(.+\.)+\w+:[0-9]{1,5}' >/tmp/StunServers.txt
 	if [ -s /tmp/StunServers.txt ]; then
 		LOG 更新 STUN 服务器列表成功
 		mv -f /tmp/StunServers.txt StunServers.txt
